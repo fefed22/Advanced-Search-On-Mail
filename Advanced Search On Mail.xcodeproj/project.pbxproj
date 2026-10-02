@@ -6,9 +6,46 @@
 	objectVersion = 110;
 	objects = {
 
+/* Begin PBXBuildFile section */
+		CA33DE6A306FDB9A00727BDF /* Advanced Search.appex in Embed Foundation Extensions */ = {isa = PBXBuildFile; fileRef = CA33DE51306FDB9A00727BDF /* Advanced Search.appex */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
+/* End PBXBuildFile section */
+
+/* Begin PBXContainerItemProxy section */
+		CA33DE68306FDB9A00727BDF /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = CA33DE37306FDB4200727BDF /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = CA33DE50306FDB9A00727BDF;
+			remoteInfo = "Advanced Search";
+		};
+/* End PBXContainerItemProxy section */
+
+/* Begin PBXCopyFilesBuildPhase section */
+		CA33DE6F306FDB9A00727BDF /* Embed Foundation Extensions */ = {
+			isa = PBXCopyFilesBuildPhase;
+			dstPath = "";
+			dstSubfolder = PlugIns;
+			files = (
+				CA33DE6A306FDB9A00727BDF /* Advanced Search.appex in Embed Foundation Extensions */,
+			);
+			name = "Embed Foundation Extensions";
+		};
+/* End PBXCopyFilesBuildPhase section */
+
 /* Begin PBXFileReference section */
 		CA33DE3F306FDB4200727BDF /* Advanced Search On Mail.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "Advanced Search On Mail.app"; sourceTree = BUILT_PRODUCTS_DIR; };
+		CA33DE51306FDB9A00727BDF /* Advanced Search.appex */ = {isa = PBXFileReference; explicitFileType = "wrapper.app-extension"; includeInIndex = 0; path = "Advanced Search.appex"; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
+
+/* Begin PBXFileSystemSynchronizedBuildFileExceptionSet section */
+		CA33DE6B306FDB9A00727BDF /* Exceptions for "Advanced Search" folder in "Advanced Search" target */ = {
+			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
+			membershipExceptions = (
+				Info.plist,
+			);
+			target = CA33DE50306FDB9A00727BDF /* Advanced Search */;
+		};
+/* End PBXFileSystemSynchronizedBuildFileExceptionSet section */
 
 /* Begin PBXFileSystemSynchronizedRootGroup section */
 		CA33DE41306FDB4200727BDF /* Advanced Search On Mail */ = {
@@ -16,10 +53,23 @@
 			path = "Advanced Search On Mail";
 			sourceTree = "<group>";
 		};
+		CA33DE52306FDB9A00727BDF /* Advanced Search */ = {
+			isa = PBXFileSystemSynchronizedRootGroup;
+			exceptions = (
+				CA33DE6B306FDB9A00727BDF /* Exceptions for "Advanced Search" folder in "Advanced Search" target */,
+			);
+			path = "Advanced Search";
+			sourceTree = "<group>";
+		};
 /* End PBXFileSystemSynchronizedRootGroup section */
 
 /* Begin PBXFrameworksBuildPhase section */
 		CA33DE3C306FDB4200727BDF /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			files = (
+			);
+		};
+		CA33DE4E306FDB9A00727BDF /* Frameworks */ = {
 			isa = PBXFrameworksBuildPhase;
 			files = (
 			);
@@ -31,6 +81,7 @@
 			isa = PBXGroup;
 			children = (
 				CA33DE41306FDB4200727BDF /* Advanced Search On Mail */,
+				CA33DE52306FDB9A00727BDF /* Advanced Search */,
 				CA33DE40306FDB4200727BDF /* Products */,
 			);
 			sourceTree = "<group>";
@@ -39,6 +90,7 @@
 			isa = PBXGroup;
 			children = (
 				CA33DE3F306FDB4200727BDF /* Advanced Search On Mail.app */,
+				CA33DE51306FDB9A00727BDF /* Advanced Search.appex */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -53,8 +105,12 @@
 				CA33DE3B306FDB4200727BDF /* Sources */,
 				CA33DE3C306FDB4200727BDF /* Frameworks */,
 				CA33DE3D306FDB4200727BDF /* Resources */,
+				CA33DE6F306FDB9A00727BDF /* Embed Foundation Extensions */,
 			);
 			buildRules = (
+			);
+			dependencies = (
+				CA33DE69306FDB9A00727BDF /* PBXTargetDependency */,
 			);
 			fileSystemSynchronizedGroups = (
 				CA33DE41306FDB4200727BDF /* Advanced Search On Mail */,
@@ -63,6 +119,24 @@
 			productName = "Advanced Search On Mail";
 			productReference = CA33DE3F306FDB4200727BDF /* Advanced Search On Mail.app */;
 			productType = "com.apple.product-type.application";
+		};
+		CA33DE50306FDB9A00727BDF /* Advanced Search */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = CA33DE6C306FDB9A00727BDF /* Build configuration list for PBXNativeTarget "Advanced Search" */;
+			buildPhases = (
+				CA33DE4D306FDB9A00727BDF /* Sources */,
+				CA33DE4E306FDB9A00727BDF /* Frameworks */,
+				CA33DE4F306FDB9A00727BDF /* Resources */,
+			);
+			buildRules = (
+			);
+			fileSystemSynchronizedGroups = (
+				CA33DE52306FDB9A00727BDF /* Advanced Search */,
+			);
+			name = "Advanced Search";
+			productName = "Advanced Search";
+			productReference = CA33DE51306FDB9A00727BDF /* Advanced Search.appex */;
+			productType = "com.apple.product-type.app-extension";
 		};
 /* End PBXNativeTarget section */
 
@@ -75,6 +149,9 @@
 				LastUpgradeCheck = 2700;
 				TargetAttributes = {
 					CA33DE3E306FDB4200727BDF = {
+						CreatedOnToolsVersion = 27.0;
+					};
+					CA33DE50306FDB9A00727BDF = {
 						CreatedOnToolsVersion = 27.0;
 					};
 				};
@@ -94,12 +171,18 @@
 			projectRoot = "";
 			targets = (
 				CA33DE3E306FDB4200727BDF /* Advanced Search On Mail */,
+				CA33DE50306FDB9A00727BDF /* Advanced Search */,
 			);
 		};
 /* End PBXProject section */
 
 /* Begin PBXResourcesBuildPhase section */
 		CA33DE3D306FDB4200727BDF /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			files = (
+			);
+		};
+		CA33DE4F306FDB9A00727BDF /* Resources */ = {
 			isa = PBXResourcesBuildPhase;
 			files = (
 			);
@@ -112,7 +195,20 @@
 			files = (
 			);
 		};
+		CA33DE4D306FDB9A00727BDF /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			files = (
+			);
+		};
 /* End PBXSourcesBuildPhase section */
+
+/* Begin PBXTargetDependency section */
+		CA33DE69306FDB9A00727BDF /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = CA33DE50306FDB9A00727BDF /* Advanced Search */;
+			targetProxy = CA33DE68306FDB9A00727BDF /* PBXContainerItemProxy */;
+		};
+/* End PBXTargetDependency section */
 
 /* Begin XCBuildConfiguration section */
 		CA33DE48306FDB4400727BDF /* Debug configuration for PBXProject "Advanced Search On Mail" */ = {
@@ -236,14 +332,17 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CODE_SIGN_ENTITLEMENTS = AdvancedSearchOnMail.entitlements;
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_TEAM = 9VGP45ZNLB;
-				ENABLE_APP_SANDBOX = YES;
+				ENABLE_APP_SANDBOX = NO;
 				ENABLE_HARDENED_RUNTIME = YES;
 				ENABLE_PREVIEWS = YES;
 				ENABLE_USER_SELECTED_FILES = readonly;
 				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_KEY_LSUIElement = YES;
+				INFOPLIST_KEY_NSAppleEventsUsageDescription = "Identifier la boîte active de Mail pour filtrer la recherche.";
 				"INFOPLIST_KEY_UIApplicationSceneManifest_Generation[sdk=iphoneos*]" = YES;
 				"INFOPLIST_KEY_UIApplicationSceneManifest_Generation[sdk=iphonesimulator*]" = YES;
 				"INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents[sdk=iphoneos*]" = YES;
@@ -262,9 +361,9 @@
 				PRODUCT_BUNDLE_IDENTIFIER = "Crea2media.Advanced-Search-On-Mail";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				REGISTER_APP_GROUPS = YES;
-				SDKROOT = auto;
+				SDKROOT = macosx;
 				STRING_CATALOG_GENERATE_SYMBOLS = YES;
-				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator macosx xros xrsimulator";
+				SUPPORTED_PLATFORMS = macosx;
 				SWIFT_APPROACHABLE_CONCURRENCY = YES;
 				SWIFT_DEFAULT_ACTOR_ISOLATION = MainActor;
 				SWIFT_EMIT_LOC_STRINGS = YES;
@@ -280,14 +379,17 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CODE_SIGN_ENTITLEMENTS = AdvancedSearchOnMail.entitlements;
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_TEAM = 9VGP45ZNLB;
-				ENABLE_APP_SANDBOX = YES;
+				ENABLE_APP_SANDBOX = NO;
 				ENABLE_HARDENED_RUNTIME = YES;
 				ENABLE_PREVIEWS = YES;
 				ENABLE_USER_SELECTED_FILES = readonly;
 				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_KEY_LSUIElement = YES;
+				INFOPLIST_KEY_NSAppleEventsUsageDescription = "Identifier la boîte active de Mail pour filtrer la recherche.";
 				"INFOPLIST_KEY_UIApplicationSceneManifest_Generation[sdk=iphoneos*]" = YES;
 				"INFOPLIST_KEY_UIApplicationSceneManifest_Generation[sdk=iphonesimulator*]" = YES;
 				"INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents[sdk=iphoneos*]" = YES;
@@ -306,9 +408,9 @@
 				PRODUCT_BUNDLE_IDENTIFIER = "Crea2media.Advanced-Search-On-Mail";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				REGISTER_APP_GROUPS = YES;
-				SDKROOT = auto;
+				SDKROOT = macosx;
 				STRING_CATALOG_GENERATE_SYMBOLS = YES;
-				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator macosx xros xrsimulator";
+				SUPPORTED_PLATFORMS = macosx;
 				SWIFT_APPROACHABLE_CONCURRENCY = YES;
 				SWIFT_DEFAULT_ACTOR_ISOLATION = MainActor;
 				SWIFT_EMIT_LOC_STRINGS = YES;
@@ -316,6 +418,72 @@
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2,7";
 				XROS_DEPLOYMENT_TARGET = 27.0;
+			};
+			name = Release;
+		};
+		CA33DE6D306FDB9A00727BDF /* Debug configuration for PBXNativeTarget "Advanced Search" */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CODE_SIGN_STYLE = Automatic;
+				COMBINE_HIDPI_IMAGES = YES;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = 9VGP45ZNLB;
+				ENABLE_APP_SANDBOX = YES;
+				ENABLE_HARDENED_RUNTIME = YES;
+				ENABLE_USER_SELECTED_FILES = readonly;
+				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = "Advanced Search/Info.plist";
+				INFOPLIST_KEY_CFBundleDisplayName = "Advanced Search";
+				INFOPLIST_KEY_NSHumanReadableCopyright = "";
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/../Frameworks",
+					"@executable_path/../../../../Frameworks",
+				);
+				MACOSX_DEPLOYMENT_TARGET = 26.6;
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = "Crea2media.Advanced-Search-On-Mail.Advanced-Search";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = macosx;
+				SKIP_INSTALL = YES;
+				STRING_CATALOG_GENERATE_SYMBOLS = YES;
+				SWIFT_APPROACHABLE_CONCURRENCY = YES;
+				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_UPCOMING_FEATURE_MEMBER_IMPORT_VISIBILITY = YES;
+				SWIFT_VERSION = 5.0;
+			};
+			name = Debug;
+		};
+		CA33DE6E306FDB9A00727BDF /* Release configuration for PBXNativeTarget "Advanced Search" */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CODE_SIGN_STYLE = Automatic;
+				COMBINE_HIDPI_IMAGES = YES;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = 9VGP45ZNLB;
+				ENABLE_APP_SANDBOX = YES;
+				ENABLE_HARDENED_RUNTIME = YES;
+				ENABLE_USER_SELECTED_FILES = readonly;
+				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = "Advanced Search/Info.plist";
+				INFOPLIST_KEY_CFBundleDisplayName = "Advanced Search";
+				INFOPLIST_KEY_NSHumanReadableCopyright = "";
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/../Frameworks",
+					"@executable_path/../../../../Frameworks",
+				);
+				MACOSX_DEPLOYMENT_TARGET = 26.6;
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = "Crea2media.Advanced-Search-On-Mail.Advanced-Search";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = macosx;
+				SKIP_INSTALL = YES;
+				STRING_CATALOG_GENERATE_SYMBOLS = YES;
+				SWIFT_APPROACHABLE_CONCURRENCY = YES;
+				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_UPCOMING_FEATURE_MEMBER_IMPORT_VISIBILITY = YES;
+				SWIFT_VERSION = 5.0;
 			};
 			name = Release;
 		};
@@ -335,6 +503,14 @@
 			buildConfigurations = (
 				CA33DE4B306FDB4400727BDF /* Debug configuration for PBXNativeTarget "Advanced Search On Mail" */,
 				CA33DE4C306FDB4400727BDF /* Release configuration for PBXNativeTarget "Advanced Search On Mail" */,
+			);
+			defaultConfigurationName = Release;
+		};
+		CA33DE6C306FDB9A00727BDF /* Build configuration list for PBXNativeTarget "Advanced Search" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				CA33DE6D306FDB9A00727BDF /* Debug configuration for PBXNativeTarget "Advanced Search" */,
+				CA33DE6E306FDB9A00727BDF /* Release configuration for PBXNativeTarget "Advanced Search" */,
 			);
 			defaultConfigurationName = Release;
 		};
