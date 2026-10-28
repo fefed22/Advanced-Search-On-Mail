@@ -103,6 +103,46 @@ nonisolated enum EmlxParser {
         return String(t.prefix(maxChars))
     }
 
+    /// Poids estimé (décodé) des pièces jointes contenues dans un .emlx complet.
+    static func attachmentBytes(fromFile path: String) -> Int64 {
+        guard let data = try? Data(contentsOf: URL(fileURLWithPath: path), options: .mappedIfSafe),
+              let nl = data.firstIndex(of: 0x0A) else { return 0 }
+        let first = String(decoding: data[data.startIndex..<nl], as: UTF8.self)
+            .trimmingCharacters(in: .whitespacesAndNewlines)
+        let start = data.index(after: nl)
+        let n = Int(first) ?? 0
+        let end = n > 0 ? min(data.endIndex, start + n) : data.endIndex
+        return partAttachmentBytes(Data(data[start..<end]), depth: 0)
+    }
+
+    private static func partAttachmentBytes(_ d: Data, depth: Int) -> Int64 {
+        guard depth < 8 else { return 0 }
+        let (head, body) = split(d)
+        let h = parseHeaders(head)
+        let (type, params) = parseContentType(h["content-type"] ?? "text/plain")
+
+        if type.hasPrefix("multipart/"), let boundary = params["boundary"] {
+            let s = String(data: body, encoding: .isoLatin1) ?? ""
+            var total: Int64 = 0
+            for part in s.components(separatedBy: "--" + boundary).dropFirst() {
+                if part.hasPrefix("--") { break }
+                var p = Substring(part)
+                if p.hasPrefix("\r\n") { p = p.dropFirst(2) } else if p.hasPrefix("\n") { p = p.dropFirst() }
+                if let pd = String(p).data(using: .isoLatin1) { total += partAttachmentBytes(pd, depth: depth + 1) }
+            }
+            return total
+        }
+
+        let disp = (h["content-disposition"] ?? "").lowercased()
+        let named = disp.contains("filename") || params["name"] != nil
+        let isAttachment = disp.hasPrefix("attachment")
+            || (named && type != "text/plain" && type != "text/html")
+        guard isAttachment else { return 0 }
+
+        let payload = Int64(body.reduce(0) { $1 == 10 || $1 == 13 ? $0 : $0 + 1 })
+        return (h["content-transfer-encoding"] ?? "").lowercased() == "base64" ? payload * 3 / 4 : payload
+    }
+
     private static func partText(_ d: Data, depth: Int) -> String {
         guard depth < 8 else { return "" }
         let (head, body) = split(d)

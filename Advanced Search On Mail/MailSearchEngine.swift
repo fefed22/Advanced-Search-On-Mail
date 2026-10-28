@@ -55,9 +55,34 @@ final class MailSearchEngine: ObservableObject {
                     self.results = res.hits
                     self.truncated = res.truncated
                     self.errorMessage = nil
+                    self.fillAttachmentSizes()
                 } else {
                     self.results = []
                     self.errorMessage = err
+                }
+            }
+        }
+    }
+
+    /// Calcule en arrière-plan le poids des pièces jointes des résultats affichés.
+    func fillAttachmentSizes() {
+        let gen = generation
+        let ids = results.filter { $0.attachmentCount > 0 && $0.attachmentSize == nil }.map(\.id)
+        guard !ids.isEmpty else { return }
+        Task.detached(priority: .utility) { [weak self] in
+            var sizes = [Int64?](repeating: nil, count: ids.count)
+            sizes.withUnsafeMutableBufferPointer { buf in
+                let base = buf.baseAddress!
+                DispatchQueue.concurrentPerform(iterations: ids.count) { i in
+                    base[i] = AttachmentSizer.size(rowid: ids[i])
+                }
+            }
+            var map: [Int64: Int64] = [:]
+            for (i, id) in ids.enumerated() { if let s = sizes[i] { map[id] = s } }
+            await MainActor.run {
+                guard let self, gen == self.generation, !map.isEmpty else { return }
+                for i in self.results.indices {
+                    if let s = map[self.results[i].id] { self.results[i].attachmentSize = s }
                 }
             }
         }
@@ -71,6 +96,8 @@ final class MailSearchEngine: ObservableObject {
         Task.detached(priority: .utility) { [weak self] in
             BodyIndexer.run { done, total in
                 Task { @MainActor in
+                    // Premier rapport : la carte des .emlx est prête, on peut calculer les poids.
+                    if self?.total == 0 { self?.fillAttachmentSizes() }
                     self?.indexed = done
                     self?.total = total
                 }

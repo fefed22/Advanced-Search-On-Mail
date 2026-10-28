@@ -107,6 +107,19 @@ struct ContentView: View {
             TableColumn("Expéditeur", value: \.sender).width(min: 100, ideal: 170)
             TableColumn("Objet", value: \.subject)
             TableColumn("Dossier", value: \.mailbox).width(min: 60, ideal: 110)
+            TableColumn("Pièces jointes") { hit in
+                if hit.attachmentCount > 0 {
+                    HStack(spacing: 4) {
+                        Image(systemName: "paperclip").foregroundStyle(.secondary)
+                        Text("\(hit.attachmentCount)")
+                        if let size = hit.attachmentSize {
+                            Text("· " + size.formatted(.byteCount(style: .file)))
+                                .foregroundStyle(.secondary)
+                        }
+                    }
+                }
+            }
+            .width(min: 80, ideal: 120)
         }
         .contextMenu(forSelectionType: Int64.self) { _ in
         } primaryAction: { ids in

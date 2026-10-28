@@ -41,6 +41,8 @@ nonisolated struct MailHit: Identifiable, Hashable {
     let sender: String
     let date: Date?
     let mailbox: String
+    let attachmentCount: Int
+    var attachmentSize: Int64? = nil   // calculée après coup depuis les fichiers
 }
 
 nonisolated struct MailboxInfo: Identifiable, Hashable {
@@ -174,14 +176,17 @@ nonisolated enum MailDB {
             conds.append("m.mailbox = ?")
             binds.append(.int(mb))
         }
-        if c.attachment != .any, db.hasTable("attachments") {
+        let hasAtt = db.hasTable("attachments")
+        let attCol = db.hasColumn("attachments", "message_id") ? "message_id" : "message"
+        if c.attachment != .any, hasAtt {
             let neg = c.attachment == .without ? "NOT " : ""
-            conds.append("\(neg)EXISTS (SELECT 1 FROM attachments t WHERE t.message_id = m.ROWID)")
+            conds.append("\(neg)EXISTS (SELECT 1 FROM attachments t WHERE t.\(attCol) = m.ROWID)")
         }
+        let attCount = hasAtt ? "(SELECT COUNT(*) FROM attachments t WHERE t.\(attCol) = m.ROWID)" : "0"
 
         let sql = """
             SELECT m.ROWID, COALESCE(s.subject, ''), COALESCE(a.comment, ''), COALESCE(a.address, ''),
-                   m.date_received, COALESCE(mb.url, '')
+                   m.date_received, COALESCE(mb.url, ''), \(attCount)
             FROM messages m
             LEFT JOIN subjects s ON s.ROWID = m.subject
             LEFT JOIN addresses a ON a.ROWID = m.sender
@@ -200,7 +205,8 @@ nonisolated enum MailDB {
                                 subject: SQLite.text(st, 1),
                                 sender: sender,
                                 date: t > 0 ? Date(timeIntervalSince1970: t) : nil,
-                                mailbox: folderName(SQLite.text(st, 5))))
+                                mailbox: folderName(SQLite.text(st, 5)),
+                                attachmentCount: Int(sqlite3_column_int64(st, 6))))
         }
         let truncated = hits.count > maxResults
         if truncated { hits.removeLast() }
@@ -217,6 +223,7 @@ nonisolated final class MailFileMap: @unchecked Sendable {
 
     func set(_ m: [Int64: String]) { lock.lock(); map = m; lock.unlock() }
     func path(for id: Int64) -> String? { lock.lock(); defer { lock.unlock() }; return map[id] }
+    var isEmpty: Bool { lock.lock(); defer { lock.unlock() }; return map.isEmpty }
 
     /// Parcourt l'arborescence de Mail : ROWID -> chemin du .emlx.
     static func scan(root: String) -> [Int64: String] {
@@ -253,6 +260,43 @@ nonisolated extension MailDB {
         if !id.hasPrefix("<") { id = "<" + id }
         if !id.hasSuffix(">") { id += ">" }
         return id
+    }
+}
+
+// MARK: - Taille des pièces jointes
+
+nonisolated enum AttachmentSizer {
+    private static let lock = NSLock()
+    nonisolated(unsafe) private static var cache: [Int64: Int64] = [:]
+
+    /// Poids total des pièces jointes d'un message, ou nil si le fichier n'est pas disponible localement.
+    static func size(rowid: Int64) -> Int64? {
+        lock.lock(); let cached = cache[rowid]; lock.unlock()
+        if let cached { return cached }
+        guard let path = MailFileMap.shared.path(for: rowid) else { return nil }
+
+        // Pièces jointes téléchargées à part : …/Attachments/<ROWID>/ à côté de …/Messages/
+        let dir = ((path as NSString).deletingLastPathComponent as NSString)
+            .deletingLastPathComponent + "/Attachments/\(rowid)"
+        var total = folderSize(dir)
+        if total == 0, !path.hasSuffix(".partial.emlx") {
+            total = EmlxParser.attachmentBytes(fromFile: path)
+        }
+        guard total > 0 else { return nil }
+        lock.lock(); cache[rowid] = total; lock.unlock()
+        return total
+    }
+
+    private static func folderSize(_ dir: String) -> Int64 {
+        guard let e = FileManager.default.enumerator(at: URL(fileURLWithPath: dir),
+                                                     includingPropertiesForKeys: [.fileSizeKey, .isRegularFileKey])
+        else { return 0 }
+        var total: Int64 = 0
+        for case let url as URL in e {
+            let v = try? url.resourceValues(forKeys: [.fileSizeKey, .isRegularFileKey])
+            if v?.isRegularFile == true { total += Int64(v?.fileSize ?? 0) }
+        }
+        return total
     }
 }
 
